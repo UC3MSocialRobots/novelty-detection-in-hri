@@ -25,7 +25,7 @@ red = 'STAND_POINTING_RIGHT'
 blue = 'STAND_POINTING_LEFT'
 green = 'STAND_POINTING_FORWARD'
 
-global GMM_n, one_n, lsa_n, K_n, GMM_s, one_s, lsa_s, K_s  #Novelty Scores for each algorithm, those ''_n are for noise score, ''_s are for strangeness score 
+global GMM_n, one_n, lsa_n, K_n, GMM_s, one_s, lsa_s  #Novelty Scores for each algorithm, those ''_n are for noise score, ''_s are for strangeness score 
 global K_GMM_n, K_KMeans_n, K_GMM_s, K_KMeans_s #K_GMM_n, K_KMeans_n are the noise curiosity factors for each algorithm
                                                 #K_GMM_s, K_KMeans_s are the strangeness curiosity factors for each algorithm
                                                 #Ks is a list containing the 4 above mentioned parameters
@@ -50,7 +50,7 @@ def compute_and_reload_figures(normal_users, queue, users_normal, users, Ks,  na
     Plots a bar graph with the scores and the names
     '''
     
-    global GMM_n, one_n, lsa_n, K_n, GMM_s, one_s, lsa_s, K_s  #Novelty Scores for each algorithm, those ''_n are for noise score, ''_s are for strangeness score 
+    global GMM_n, one_n, lsa_n, K_n, GMM_s, one_s, lsa_s  #Novelty Scores for each algorithm, those ''_n are for noise score, ''_s are for strangeness score 
     
     GMM_n = []
     one_n = []
@@ -59,7 +59,7 @@ def compute_and_reload_figures(normal_users, queue, users_normal, users, Ks,  na
     GMM_s = []
     one_s = []
     lsa_s = []
-    K_s = []
+    K_s =[]
     
     compute_scores(normal_users, queue, Ks) # Calls the function to compute scores, that updates GMM_n, one_n, lsa_n, K_n, GMM_s, one_s, lsa_s 
 
@@ -71,6 +71,7 @@ def compute_and_reload_figures(normal_users, queue, users_normal, users, Ks,  na
     scores_s = np.array([K_s[0],lsa_s[0]+0.01,one_s[0]+0.01,GMM_s[0]]) #Create a numpy array with the noise scores to display in the graph
     names_s = ('KM','LSA', 'SVM1C','GMM') #names to display in the strangeness score graph
 
+    print scores_s
 
     # If the entry is detected as not interesting by all algorithms, the strangeness score is not displayed
     if GMM_n[0]>=1 and one_n[0]>=1 and lsa_n[0]>=1 and K_n[0]>=1:
@@ -133,7 +134,7 @@ FUNTIONS TO CALCULATE NOVELTY SCORES
 ---------
 '''
 
-def compute_scores(normal_users, queue, Ks):
+def compute_scores(normal_users, queue, Ks=[]):
 
     '''
         Calculates the novelty scores (noise and strangeness) for the 4 algotithms
@@ -142,6 +143,15 @@ def compute_scores(normal_users, queue, Ks):
     '''
     
     global GMM_n, one_n, lsa_n, K_n, GMM_s, one_s, lsa_s, K_s #Novelty Scores for each algorithm, those ''_n are for noise score, ''_s are for strangeness score 
+
+    GMM_n = []
+    one_n = []
+    lsa_n = []
+    K_n = []
+    GMM_s = []
+    one_s = []
+    lsa_s = []
+    K_s = []
 
     K_GMM_n, K_KMeans_n, K_GMM_s, K_KMeans_s = Ks #K_GMM_n, K_KMeans_n are the noise curiosity factors for each algorithm
                                                   #K_GMM_s, K_KMeans_s are the strangeness curiosity factors for each algorithm
@@ -226,6 +236,8 @@ def compute_scores(normal_users, queue, Ks):
     if x == [0]:
         lsa_s.append(0)
 
+    return GMM_n, one_n, lsa_n, K_n, GMM_s, one_s, lsa_s, K_s
+
 
 def get_score_last_item(x, K_curiosity):
 
@@ -242,7 +254,7 @@ FUNTIONS TO START THE SYSTEM
 -------------
 '''
 
-def start_users(number_users, pose):
+def start_users(number_users, pose, indexes=[]):
     '''
         Starts the system creating 
 
@@ -256,10 +268,12 @@ def start_users(number_users, pose):
         It takes the median value of the users
     '''
     import random
-    indexes = [i for i in np.arange(30)]
-    indexes.pop(indexes.index(0)) # There is no 'user00' data, so we remove it
-    indexes.pop(indexes.index(6))  # There is no 'user06' data, so we remove it
-    indexes.pop(indexes.index(12)) # There is no 'user12' data, POINTING LEFT so we remove it
+
+    if indexes == []:
+	    indexes = [i for i in np.arange(30)]
+	    indexes.pop(indexes.index(0)) # There is no 'user00' data, so we remove it
+	    indexes.pop(indexes.index(6))  # There is no 'user06' data, so we remove it
+	    indexes.pop(indexes.index(12)) # There is no 'user12' data, POINTING LEFT so we remove it
     
 
     users = []
