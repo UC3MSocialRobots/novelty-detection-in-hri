@@ -13,6 +13,15 @@ Steps of use
 
 lsanomaly.py form http://cit.mak.ac.ug/staff/jquinn/software/lsanomaly.html
 
-data-torso-relative from https://github.com/VGonPa/datasets-poses2012 and save as data
+data-torso-relative from https://github.com/VGonPa/datasets-poses2012 and save in a folder as 'data'
 
-2. Open Novelty Detection system for a Social Robot.ipynb
+all files from folder 'helper files'
+
+2. Open 'Novelty Detection system for a Social Robot.ipynb' to see the system working
+
+3. Open EXPERIMENTS to see the automated tests for the novelty detection system
+
+
+Other files
+========================
+'excels' include spreadsheets used to present how many pose entries were needed to pass the noise filter. They were used for the Results section in my Thesis.
